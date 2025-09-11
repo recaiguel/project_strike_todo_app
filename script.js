@@ -53,31 +53,6 @@ function addTodo() {
     }
 }
 
-    // //Hole den Text aus dem Eingabefeld und entferne Leerzeichen am Anfang und Ende
-    // const todoText = todoInput.value.trim();
-
-    // //Überprüft, ob der Text nicht leer ist
-    // if (todoText !== '') {
-    //     // Erstellt ein neues Listenelement (<li>) für den ToDo
-    //     const todoItem = document.createElement('li');
-    //     todoItem.classList.add('todo-item');
-
-    //     // data-Attribut für das zählen der Strikes
-    //     todoItem.dataset.strikes = 0;
-        
-    //     // Fügt den Text und die Strike-Anzeige hinzu
-    //     todoItem.innerHTML = `
-    //     <span>${todoText}</span>
-    //     <span class="strikes">0 Strikes</span>
-    //     `;
-
-    //     // Fügt das neue Element zur Liste hinzu
-    //     todoList.appendChild(todoItem);
-
-    //     // Setzt das Eingabefeld zurück
-    //     todoInput.value = '';
-    // }
-
 // Fügt einen Event-Listener zum Button hinzu
 addButton.addEventListener('click', addTodo);
 
