@@ -7,7 +7,7 @@ const todoList = document.getElementById('todo-list');
 function saveTodos() {
     console.log('Speichere die Todos...'); // Zeigt in der Konsole an ob diese Funktion ausgeführt wird
     const todos = [];
-    document.querySelectorAll('todo-item').forEach(item => {
+    document.querySelectorAll('.todo-item').forEach(item => {
         todos.push({
             text: item.querySelector('span:not(.strikes)').textContent,
             strikes: parseInt(item.dataset.strikes)
@@ -27,7 +27,9 @@ function loadTodos() {
         todoItem.dataset.strikes = todo.strikes;
         todoItem.innerHTML = `
             <span>${todo.text}</span>
-            span class="strikes">${todo.strikes} Strikes</span>
+            <span class="strikes">${todo.strikes} Strikes</span>
+            <button class="delete-button">X</button>
+
         `;
         todoList.appendChild(todoItem);
     });
@@ -45,6 +47,7 @@ function addTodo() {
         todoItem.innerHTML = `
         <span>${todoText}</span>
         <span class="strikes">0 Strikes</span>
+        <button class="delete-button">X</button>
         `;
 
         todoList.appendChild(todoItem);
@@ -58,6 +61,16 @@ addButton.addEventListener('click', addTodo);
 
 // Event Listener für die gesamte Liste (Event Delegation)
 todoList.addEventListener('click', function(event) {
+    
+    // Überprüft, ob das geklickte Element der delete-button ist
+    if (event.target.classList.contains('delete-button')) {
+        const itemToRemove = event.target.closest('li.todo-item');
+        if (itemToRemove) {
+            itemToRemove.remove();
+            saveTodos(); // Speichert die Änderung bzw. das Löschen der Todos
+        }
+    }
+    
     // Überprüft, ob das geklickte Element ein todo-item ist
     const clickedItem = event.target.closest('li.todo-item');
 
@@ -66,6 +79,9 @@ todoList.addEventListener('click', function(event) {
         let currentStrikes = parseInt(clickedItem.dataset.strikes);
         currentStrikes++;
         clickedItem.dataset.strikes = currentStrikes;
+
+        // Speichert den letzten Klick-Zeitstempel
+        clickedItem.dataset.lastclicked = new Date().getTime();s
 
         // Text im HTML aktualisieren
         const strikeSpan = clickedItem.querySelector('.strikes');
