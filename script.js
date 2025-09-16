@@ -20,11 +20,23 @@ function saveTodos() {
 function loadTodos() {
     const storedTodos = localStorage.getItem('todos');
     const todos = storedTodos ? JSON.parse(storedTodos) : [];
-    
+
     todos.forEach(todo => {
+        // Neu: Überprüft ob ein Tag vergangen ist
+        const oneDayInMs = 86400000
+        if (todo.lastclicked && (new Date().getTime() - todo.lastclicked > oneDayInMs)) {
+            todo.strikes = 0;
+            saveTodos();
+        }
+
         const todoItem = document.createElement('li');
         todoItem.classList.add('todo-item');
         todoItem.dataset.strikes = todo.strikes;
+
+        // Fügt den neuen Zeitstempel als data-attribut hinzu
+        if (todo.lastclicked) {
+            todoItem.dataset.lastclicked = todos.strikes;
+        }
         todoItem.innerHTML = `
             <span>${todo.text}</span>
             <span class="strikes">${todo.strikes} Strikes</span>
@@ -81,7 +93,7 @@ todoList.addEventListener('click', function(event) {
         clickedItem.dataset.strikes = currentStrikes;
 
         // Speichert den letzten Klick-Zeitstempel
-        clickedItem.dataset.lastclicked = new Date().getTime();s
+        clickedItem.dataset.lastclicked = new Date().getTime();
 
         // Text im HTML aktualisieren
         const strikeSpan = clickedItem.querySelector('.strikes');
