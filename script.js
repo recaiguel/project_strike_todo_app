@@ -20,13 +20,15 @@ function saveTodos() {
 function loadTodos() {
     const storedTodos = localStorage.getItem('todos');
     const todos = storedTodos ? JSON.parse(storedTodos) : [];
+    const oneDayInMs = 86400000
 
     todos.forEach(todo => {
-        // Neu: Überprüft ob ein Tag vergangen ist
-        const oneDayInMs = 86400000
+        // Neu: Überprüft, ob die Aufgabe einen Zeitstempel hat und ob ein Tag vergangen ist
         if (todo.lastclicked && (new Date().getTime() - todo.lastclicked > oneDayInMs)) {
+            // Wenn die Bedingung wahr ist, setzen wir die Strikes i Objekt zurück
             todo.strikes = 0;
-            saveTodos();
+            // Da wir die Strikes zurückgesetzt haben, setzen wir auch den Zeitstempel zurück
+            todo.lastclicked = new Date().getTime();
         }
 
         const todoItem = document.createElement('li');
@@ -45,6 +47,8 @@ function loadTodos() {
         `;
         todoList.appendChild(todoItem);
     });
+    // Neu: Jetzt speichern wir die gesamte, aktualisierte Liste
+    localStorage.setItem('todos', JSON.stringify(todos));
 }
 
 // Funktion zum hinzufügen neuer Aufgaben
